@@ -1,0 +1,60 @@
+<html>
+  <header>
+    <title>Naive Redux</title>
+  </header>
+  <body>
+    <div style="text-align: center">
+      <div>
+        <h1 id="number">0</h1>
+      </div>
+      <div>
+        <button id="btnIncr">Incr</button>
+        <button id="btnDecr">Decr</button>
+      </div>
+    </div>
+    <script type="text/javascript" src="redux.js"></script>
+    <script>
+      // the script for the app
+      ;(function () {
+        const initState = { count: 0 }
+        const actions = {
+          INCREMENT: 'INCREMENT',
+          DECREMENT: 'DECREMENT',
+        }
+        const myReducer = (state = initState, action) => {
+          switch (action) {
+            case actions.INCREMENT:
+              return {
+                ...state,
+                count: state.count + 1,
+              }
+
+            case actions.DECREMENT:
+              return {
+                ...state,
+                count: state.count - 1,
+              }
+            default:
+              return state
+          }
+        }
+
+        const store = createStore(myReducer)
+
+        const elNumber = document.querySelector('#number')
+        const elBtnIncr = document.querySelector('#btnIncr')
+        const elBtnDecr = document.querySelector('#btnDecr')
+
+        // init DOM
+        elNumber.innerHTML = parseInt(store.getState().count)
+        elBtnIncr.addEventListener('click', () => store.dispatch(actions.INCREMENT))
+        elBtnDecr.addEventListener('click', () => store.dispatch(actions.DECREMENT))
+
+        // refresh the UI whenever the state chagnes
+        store.subscribe(() => {
+          elNumber.innerHTML = parseInt(store.getState().count)
+        })
+      })()
+    </script>
+  </body>
+</html>
